@@ -53,11 +53,11 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- Pilih Bank ---
-selected_bank = st.selectbox("Pilih Bank", sorted(df["Bank"].unique()))
+selected_bank = st.selectbox("Choose a Bank", sorted(df["Bank"].unique()))
 filtered_df = df[df["Bank"] == selected_bank]
 
 # --- Input Penempatan Dana ---
-st.markdown("### Nominal Penempatan")
+st.markdown("### How Much Money Do You Want to Deposit?")
 deposit = st.number_input(
     "Masukkan jumlah penempatan:", min_value=8_000_000, step=1_000_000
 )
