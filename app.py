@@ -71,7 +71,7 @@ tenor = st.select_slider("Tenor", options=available_tenors, value=available_teno
 # --- Ambil Suku Bunga ---
 rate_row = filtered_df[filtered_df["Tenor"] == tenor]
 interest_rate = rate_row["Interest"].values[0] if not rate_row.empty else 0.0
-st.markdown(f"### Suku Bunga\n{interest_rate:.2f} %")
+st.markdown(f"### Interest\n{interest_rate:.2f} %")
 
 # --- Fungsi Simulasi Perhitungan Bunga ---
 def calculate_return(nominal, rate, tenor_months):
