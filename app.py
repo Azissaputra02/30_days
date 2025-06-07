@@ -17,7 +17,7 @@ data = [
 ]
 df = pd.DataFrame(data, columns=["Bank", "Tenor", "Interest"])
 
-st.set_page_config(page_title="RUPTL Comparison Dashboard", layout="wide")
+st.set_page_config(page_title="Time Deposit", layout="wide")
 st.markdown("""
 <h1 style="
     font-size: 3em;
@@ -28,14 +28,14 @@ st.markdown("""
     text-align: left;
     margin-top: -20px;
 ">
-RUPTL Comparison Dashboard
+Time Deposit
 </h1>
 """, unsafe_allow_html=True)
 
-# --- Konfigurasi Halaman ---
-st.set_page_config(page_title="Simulasi Deposito", layout="centered")
-st.title("Simulasi Deposito")
-st.markdown("**Satu Kalkulator untuk Semua Bank di Indonesia**")
+# # --- Konfigurasi Halaman ---
+# st.set_page_config(page_title="Simulasi Deposito", layout="centered")
+# st.title("Simulasi Deposito")
+# st.markdown("**Satu Kalkulator untuk Semua Bank di Indonesia**")
 
 # --- CSS: Perbesar Slider dan Handle (5x Ukuran Normal) ---
 st.markdown("""
