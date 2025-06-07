@@ -53,7 +53,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- Pilih Bank ---
-selected_bank = st.selectbox("Choose a Bank", sorted(df["Bank"].unique()))
+selected_bank = st.selectbox("Choose Your Bank", sorted(df["Bank"].unique()))
 filtered_df = df[df["Bank"] == selected_bank]
 
 # --- Input Penempatan Dana ---
