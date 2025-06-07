@@ -17,6 +17,8 @@ data = [
 ]
 df = pd.DataFrame(data, columns=["Bank", "Tenor", "Interest"])
 
+st.write("Hi Lia")
+
 st.set_page_config(page_title="Time Deposit", layout="wide")
 st.markdown("""
 <h1 style="
