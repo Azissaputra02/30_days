@@ -13,57 +13,37 @@ st.image("https://upload.wikimedia.org/wikipedia/commons/6/6e/BCA_logo.svg", wid
 st.title("Simulasi Deposito")
 st.markdown("**Senantiasa di Sisi Anda**")
 
-# --- Nominal Penempatan (sinkron slider & input) ---
+# --- Input Nominal Penempatan ---
 st.markdown("### Nominal Penempatan")
-min_val, max_val = 8_000_000, 100_000_000_000
-
-if "deposit" not in st.session_state:
-    st.session_state.deposit = 8_000_000
-
-col1, col2 = st.columns([3, 1])
-with col1:
-    deposit_input = st.number_input(
-        "Masukkan jumlah penempatan:", min_value=min_val, max_value=max_val,
-        step=1_000_000, key="deposit"
-    )
-    st.caption(f"Format: Rp {deposit_input:,.0f}")
-
-with col2:
-    st.write("")  # spacer
-
-deposit_slider = st.slider(
-    "Geser untuk ubah nominal", min_val, max_val,
-    value=st.session_state.deposit, step=1_000_000
+deposit = st.number_input(
+    "Masukkan jumlah penempatan:", min_value=8_000_000, step=1_000_000
 )
+st.caption(f"Format: Rp {deposit:,.0f}")
 
-# --- Sinkronisasi input & slider ---
-if deposit_input != deposit_slider:
-    st.session_state.deposit = deposit_slider
-
-# --- Tenor: hanya yang tersedia di BCA ---
+# --- Input Tenor: pilihan yang tersedia di data ---
 st.markdown("### Tenor")
 available_tenors = df["Tenor"].unique().tolist()
 tenor = st.select_slider("Pilih tenor yang tersedia", options=available_tenors, value=1)
 
-# --- Suku bunga ---
+# --- Cari suku bunga ---
 rate_row = df[(df["Bank"] == "BCA") & (df["Tenor"] == tenor)]
 interest_rate = rate_row["Interest"].values[0] if not rate_row.empty else 0.0
 st.markdown(f"### Suku Bunga\n{interest_rate:.2f} %")
 
-# --- Hitung bunga deposito ---
+# --- Fungsi hitung hasil deposito ---
 def calculate_return(nominal, rate, tenor_months):
     interest = nominal * (rate / 100) * (tenor_months * 30 / 365)
-    net_interest = interest * 0.8
+    net_interest = interest * 0.8  # 20% pajak
     return nominal + net_interest, net_interest
 
-# --- Tombol Hitung ---
+# --- Tombol hitung ---
 if st.button("Hitung Simulasi"):
-    total, net_earning = calculate_return(st.session_state.deposit, interest_rate, tenor)
+    total, net_earning = calculate_return(deposit, interest_rate, tenor)
     st.markdown("### 💡 Hasil Simulasi")
     st.write(f"**Bunga Setelah Pajak (20%)**: Rp {net_earning:,.0f}")
     st.write(f"**Total Pencairan**: Rp {total:,.0f}")
 
-# --- Catatan ---
+# --- Catatan bawah ---
 st.markdown("---")
 st.caption("Catatan: Perhitungan ini hanya sebagai alat bantu simulasi investasi dan tidak dimaksudkan untuk menyediakan rekomendasi apa pun.")
 st.caption("Asumsi: 1 bulan = 30 hari, dan 1 tahun = 365 hari")
