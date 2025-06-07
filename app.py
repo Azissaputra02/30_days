@@ -17,6 +17,21 @@ data = [
 ]
 df = pd.DataFrame(data, columns=["Bank", "Tenor", "Interest"])
 
+# --- Title with gradient color ---
+st.markdown("""
+<h1 style="
+    font-size: 3em;
+    font-weight: 900;
+    background: linear-gradient(to right, #27ae60, #2980b9);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-align: left;
+    margin-top: -20px;
+">
+Deposito Simulation
+</h1>
+""", unsafe_allow_html=True)
+
 # --- Konfigurasi Halaman ---
 st.set_page_config(page_title="Simulasi Deposito", layout="centered")
 st.title("Simulasi Deposito")
