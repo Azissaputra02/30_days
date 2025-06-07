@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 
-st.write("Hi Lia")
-
 # --- Data Suku Bunga dari Semua Bank ---
 data = [
     ["BCA", 1, 3.00], ["BCA", 3, 3.00], ["BCA", 6, 2.25], ["BCA", 12, 2.00],
