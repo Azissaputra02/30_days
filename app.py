@@ -32,10 +32,8 @@ Time Deposit
 </h1>
 """, unsafe_allow_html=True)
 
-# # --- Konfigurasi Halaman ---
-# st.set_page_config(page_title="Simulasi Deposito", layout="centered")
-# st.title("Simulasi Deposito")
-st.markdown("**Satu Kalkulator untuk Semua Bank di Indonesia**")
+st.markdown("**Tired of visiting multiple websites to compare time deposit returns?
+This platform helps you simulate and compare time deposit returns from various banks—including the latest digital banks tailored for Gen Z. Now, you can find the best rates all in one place—fast, simple, and hassle-free.**")
 
 # --- CSS: Perbesar Slider dan Handle (5x Ukuran Normal) ---
 st.markdown("""
