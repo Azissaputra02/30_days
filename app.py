@@ -19,7 +19,7 @@ df = pd.DataFrame(data, columns=["Bank", "Tenor", "Interest"])
 
 # --- Konfigurasi Halaman ---
 st.set_page_config(page_title="Simulasi Deposito", layout="centered")
-st.title("💰 Simulasi Deposito")
+st.title("Simulasi Deposito")
 st.markdown("**Satu Kalkulator untuk Semua Bank di Indonesia**")
 
 # --- CSS: Perbesar Slider dan Handle (5x Ukuran Normal) ---
