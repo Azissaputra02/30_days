@@ -22,21 +22,20 @@ st.set_page_config(page_title="Simulasi Deposito", layout="centered")
 st.title("💰 Simulasi Deposito")
 st.markdown("**Satu Kalkulator untuk Semua Bank di Indonesia**")
 
-# --- CSS: Perbesar slider handle dan bar ---
+# --- CSS: Perbesar Slider dan Handle (5x Ukuran Normal) ---
 st.markdown("""
     <style>
-    /* Perbesar track slider */
     .stSlider > div[data-baseweb="slider"] > div {
-        height: 30px;
+        height: 60px;
     }
-    /* Perbesar tombol drag (thumb) */
     .stSlider .css-1c5b0k4 {
-        height: 30px;
-        width: 30px;
+        height: 60px !important;
+        width: 60px !important;
+        border-radius: 30px;
+        background-color: #2c8cff;
     }
-    /* Label slider lebih besar */
     .stSlider label {
-        font-size: 18px;
+        font-size: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -75,7 +74,7 @@ if st.button("Hitung Simulasi"):
     st.write(f"**Bunga Setelah Pajak (20%)**: Rp {net_earning:,.0f}")
     st.write(f"**Total Pencairan**: Rp {total:,.0f}")
 
-# --- Catatan Akhir ---
+# --- Footer ---
 st.markdown("---")
 st.caption("Catatan: Perhitungan ini hanya sebagai alat bantu simulasi dan tidak dimaksudkan untuk menyediakan rekomendasi apa pun.")
 st.caption("Asumsi: 1 bulan = 30 hari, dan 1 tahun = 365 hari.")
