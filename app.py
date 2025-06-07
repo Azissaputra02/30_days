@@ -59,14 +59,14 @@ filtered_df = df[df["Bank"] == selected_bank]
 # --- Input Penempatan Dana ---
 st.markdown("### How Much Money Do You Want to Deposit?")
 deposit = st.number_input(
-    "Masukkan jumlah penempatan:", min_value=8_000_000, step=1_000_000
+    "Input Here!:", min_value=8_000_000, step=1_000_000
 )
 st.caption(f"Format: Rp {deposit:,.0f}")
 
 # --- Tenor Slider (otomatis dari bank terpilih) ---
 st.markdown("### Tenor")
 available_tenors = sorted(filtered_df["Tenor"].unique())
-tenor = st.select_slider("Pilih tenor yang tersedia", options=available_tenors, value=available_tenors[0])
+tenor = st.select_slider("Tenor", options=available_tenors, value=available_tenors[0])
 
 # --- Ambil Suku Bunga ---
 rate_row = filtered_df[filtered_df["Tenor"] == tenor]
@@ -80,11 +80,11 @@ def calculate_return(nominal, rate, tenor_months):
     return nominal + net_interest, net_interest
 
 # --- Tombol Hitung ---
-if st.button("Hitung Simulasi"):
+if st.button("Calculate"):
     total, net_earning = calculate_return(deposit, interest_rate, tenor)
-    st.markdown("### Hasil Simulasi")
-    st.write(f"**Bunga Setelah Pajak (20%)**: Rp {net_earning:,.0f}")
-    st.write(f"**Total Pencairan**: Rp {total:,.0f}")
+    st.markdown("### Result")
+    st.write(f"**Interest After Tax (20%)**: Rp {net_earning:,.0f}")
+    st.write(f"**Total Earning**: Rp {total:,.0f}")
     st.write ("**Thank You Lia for Visiting!**")
 
 # --- Footer ---
