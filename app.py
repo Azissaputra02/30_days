@@ -85,7 +85,7 @@ if st.button("Hitung Simulasi"):
     st.markdown("### Hasil Simulasi")
     st.write(f"**Bunga Setelah Pajak (20%)**: Rp {net_earning:,.0f}")
     st.write(f"**Total Pencairan**: Rp {total:,.0f}")
-    st.write ("Thank You Lia for Visiting!")
+    st.write ("**Thank You Lia for Visiting!**")
 
 # --- Footer ---
 st.markdown("---")
