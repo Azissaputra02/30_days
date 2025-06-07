@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 
+st.write("Hi Lia")
+
 # --- Data Suku Bunga dari Semua Bank ---
 data = [
     ["BCA", 1, 3.00], ["BCA", 3, 3.00], ["BCA", 6, 2.25], ["BCA", 12, 2.00],
@@ -32,7 +34,6 @@ Time Deposit
 </h1>
 """, unsafe_allow_html=True)
 
-st.write("Hi Lia")
 st.markdown("**Tired of visiting multiple websites to compare time deposit returns? This platform helps you simulate and compare time deposit returns from various banks—including the latest digital banks tailored for Gen Z. Now, you can find the best rates all in one place—fast, simple, and hassle-free.**")
 
 # --- CSS: Perbesar Slider dan Handle (5x Ukuran Normal) ---
