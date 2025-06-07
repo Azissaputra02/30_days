@@ -9,7 +9,6 @@ df = pd.DataFrame(data, columns=["Bank", "Tenor", "Interest"])
 
 # --- Setup UI ---
 st.set_page_config(page_title="Simulasi Deposito", layout="centered")
-st.image("https://upload.wikimedia.org/wikipedia/commons/6/6e/BCA_logo.svg", width=100)
 st.title("Simulasi Deposito")
 st.markdown("**Senantiasa di Sisi Anda**")
 
