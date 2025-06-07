@@ -82,9 +82,10 @@ def calculate_return(nominal, rate, tenor_months):
 # --- Tombol Hitung ---
 if st.button("Hitung Simulasi"):
     total, net_earning = calculate_return(deposit, interest_rate, tenor)
-    st.markdown("### 💡 Hasil Simulasi")
+    st.markdown("### Hasil Simulasi")
     st.write(f"**Bunga Setelah Pajak (20%)**: Rp {net_earning:,.0f}")
     st.write(f"**Total Pencairan**: Rp {total:,.0f}")
+    st.write ("Thank You Lia for Visiting!")
 
 # --- Footer ---
 st.markdown("---")
