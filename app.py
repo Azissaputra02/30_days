@@ -64,7 +64,7 @@ deposit = st.number_input(
 st.caption(f"Format: Rp {deposit:,.0f}")
 
 # --- Tenor Slider (otomatis dari bank terpilih) ---
-st.markdown("### Tenor")
+st.markdown("### Tenor (Month)")
 available_tenors = sorted(filtered_df["Tenor"].unique())
 tenor = st.select_slider("Tenor", options=available_tenors, value=available_tenors[0])
 
