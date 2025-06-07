@@ -80,12 +80,22 @@ def calculate_return(nominal, rate, tenor_months):
     return nominal + net_interest, net_interest
 
 # --- Tombol Hitung ---
+# if st.button("Calculate"):
+#     total, net_earning = calculate_return(deposit, interest_rate, tenor)
+#     st.markdown("### Result")
+#     st.write(f"**Interest After Tax (20%)**: Rp {net_earning:,.0f}")
+#     st.write(f"**Total Earning**: Rp {total:,.0f}")
 if st.button("Calculate"):
     total, net_earning = calculate_return(deposit, interest_rate, tenor)
-    st.markdown("### Result")
-    st.write(f"**Interest After Tax (20%)**: Rp {net_earning:,.0f}")
-    st.write(f"**Total Earning**: Rp {total:,.0f}")
-    st.write ("**Thank You Lia for Visiting!**")
+
+    # Buat DataFrame hasil
+    result_df = pd.DataFrame({
+        "Keterangan": ["Nominal Awal", "Bunga Setelah Pajak (20%)", "Total Diterima"],
+        "Jumlah (Rp)": [deposit, net_earning, total]
+    })
+
+    st.markdown("### 📊 Hasil Simulasi")
+    st.table(result_df.style.format({"Jumlah (Rp)": "Rp {:,.0f}"}))
 
 # --- Footer ---
 st.markdown("---")
