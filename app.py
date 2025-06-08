@@ -109,7 +109,7 @@ if st.button("Calculate"):
         "Jumlah (Rp)": [deposit, net_earning, total]
     })
 
-    st.markdown("### 📊 Hasil Simulasi")
+    st.markdown("### Hasil Simulasi")
     st.table(result_df.style.format({"Jumlah (Rp)": "Rp {:,.0f}"}))
 
 # --- Footer ---
