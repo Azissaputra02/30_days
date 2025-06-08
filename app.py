@@ -73,11 +73,26 @@ rate_row = filtered_df[filtered_df["Tenor"] == tenor]
 interest_rate = rate_row["Interest"].values[0] if not rate_row.empty else 0.0
 st.markdown(f"### Interest\n{interest_rate:.2f} %")
 
-# --- Fungsi Simulasi Perhitungan Bunga ---
+# # --- Fungsi Simulasi Perhitungan Bunga ---
+# def calculate_return(nominal, rate, tenor_months):
+#     interest = nominal * (rate / 100) * (tenor_months * 30 / 365)
+#     net_interest = interest * 0.8  # dikurangi pajak 20%
+#     return nominal + net_interest, net_interest
 def calculate_return(nominal, rate, tenor_months):
-    interest = nominal * (rate / 100) * (tenor_months * 30 / 365)
-    net_interest = interest * 0.8  # dikurangi pajak 20%
-    return nominal + net_interest, net_interest
+    if tenor_months == 12:
+        days = 365
+    else:
+        # Fleksibel: anggap 1 bulan = 30 hari
+        days = tenor_months * 30
+
+    # Hitung bunga kotor
+    interest = nominal * (rate / 100) * (days / 365)
+
+    # Potong pajak 20%
+    net_interest = interest * 0.8
+    total = nominal + net_interest
+
+    return total, net_interest
 
 # --- Tombol Hitung ---
 # if st.button("Calculate"):
