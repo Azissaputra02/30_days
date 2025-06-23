@@ -20,27 +20,18 @@ df = pd.DataFrame(data, columns=["Bank", "Tenor", "Interest"])
 # --- Set Page Config ---
 st.set_page_config(page_title="Time Deposit Comparison", layout="wide")
 
-# --- Mode Pilihan (Dark/Light) ---
-mode = st.radio("Choose Mode:", ["Light", "Dark"], horizontal=True)
-if mode == "Dark":
-    bg_color = "#1E1E1E"
-    text_color = "#FFFFFF"
-else:
-    bg_color = "#FFFFFF"
-    text_color = "#000000"
-
-# --- Apply Custom CSS ---
-st.markdown(f"""
+# --- Apply White Background CSS ---
+st.markdown("""
     <style>
-    body {{
-        background-color: {bg_color};
-        color: {text_color};
-    }}
+    body {
+        background-color: #ffffff;
+        color: #000000;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# --- Judul Halaman ---
-st.markdown(f"""
+# --- Title ---
+st.markdown("""
 <h1 style="
     font-size: 3em;
     font-weight: 900;
@@ -56,26 +47,26 @@ Time Deposit Comparison
 
 st.markdown("Compare time deposit returns from two banks and find which gives you a better deal—all in one place.")
 
-# --- Pilihan Bank ---
+# --- Select Banks ---
 col1, col2 = st.columns(2)
 with col1:
     bank1 = st.selectbox("Choose First Bank", sorted(df["Bank"].unique()), key="bank1")
 with col2:
     bank2 = st.selectbox("Choose Second Bank", sorted(df["Bank"].unique()), key="bank2")
 
-# --- Input Nominal ---
+# --- Input Deposit Amount ---
 deposit = st.number_input("Input your deposit amount (Rp):", min_value=8_000_000, step=1_000_000, format="%i")
 st.caption(f"Formatted: Rp {deposit:,.0f}")
 
-# --- Input Tenor (intersecting options) ---
+# --- Common Tenor Options ---
 common_tenors = sorted(set(df[df["Bank"] == bank1]["Tenor"]).intersection(df[df["Bank"] == bank2]["Tenor"]))
 tenor = st.select_slider("Tenor (Month)", options=common_tenors, value=common_tenors[0])
 
-# --- Ambil Suku Bunga dari Kedua Bank ---
+# --- Get Interest Rates ---
 rate1 = df[(df["Bank"] == bank1) & (df["Tenor"] == tenor)]["Interest"].values[0]
 rate2 = df[(df["Bank"] == bank2) & (df["Tenor"] == tenor)]["Interest"].values[0]
 
-# --- Fungsi Perhitungan Bunga ---
+# --- Calculate Returns ---
 def calculate_return(nominal, rate, tenor_months):
     days = 365 if tenor_months == 12 else tenor_months * 30
     gross_interest = nominal * (rate / 100) * (days / 365)
@@ -83,7 +74,7 @@ def calculate_return(nominal, rate, tenor_months):
     total = nominal + net_interest
     return total, net_interest
 
-# --- Hitung dan Tampilkan ---
+# --- Compare Button ---
 if st.button("Compare"):
     total1, net1 = calculate_return(deposit, rate1, tenor)
     total2, net2 = calculate_return(deposit, rate2, tenor)
@@ -99,8 +90,8 @@ if st.button("Compare"):
     st.table(result.style.format({bank1: "Rp {:,.0f}", bank2: "Rp {:,.0f}"}))
 
     st.warning("""
-💡 **Note**: Make sure you're comparing banks that you already use. 
-- Transferring funds to unfamiliar or digital-only banks may incur fees.
+💡 **Note**: Make sure you're comparing banks that you already use.  
+- Transferring funds to unfamiliar or digital-only banks may incur fees.  
 - Higher interest rates (e.g., >4.25%) may reflect higher risk or limited LPS protection.
 """)
 
