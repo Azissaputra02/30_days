@@ -17,8 +17,30 @@ data = [
 ]
 df = pd.DataFrame(data, columns=["Bank", "Tenor", "Interest"])
 
-st.set_page_config(page_title="Time Deposit", layout="wide")
-st.markdown("""
+# --- Set Page Config ---
+st.set_page_config(page_title="Time Deposit Comparison", layout="wide")
+
+# --- Mode Pilihan (Dark/Light) ---
+mode = st.radio("Choose Mode:", ["Light", "Dark"], horizontal=True)
+if mode == "Dark":
+    bg_color = "#1E1E1E"
+    text_color = "#FFFFFF"
+else:
+    bg_color = "#FFFFFF"
+    text_color = "#000000"
+
+# --- Apply Custom CSS ---
+st.markdown(f"""
+    <style>
+    body {{
+        background-color: {bg_color};
+        color: {text_color};
+    }}
+    </style>
+""", unsafe_allow_html=True)
+
+# --- Judul Halaman ---
+st.markdown(f"""
 <h1 style="
     font-size: 3em;
     font-weight: 900;
@@ -28,91 +50,60 @@ st.markdown("""
     text-align: left;
     margin-top: -20px;
 ">
-Time Deposit
+Time Deposit Comparison
 </h1>
 """, unsafe_allow_html=True)
 
-st.markdown("**Tired of visiting multiple websites to compare time deposit returns? This platform helps you simulate and compare time deposit returns from various banks—including the latest digital banks tailored for Gen Z. Now, you can find the best rates all in one place—fast, simple, and hassle-free.**")
+st.markdown("Compare time deposit returns from two banks and find which gives you a better deal—all in one place.")
 
-# --- CSS: Perbesar Slider dan Handle (5x Ukuran Normal) ---
-st.markdown("""
-    <style>
-    .stSlider > div[data-baseweb="slider"] > div {
-        height: 60px;
-    }
-    .stSlider .css-1c5b0k4 {
-        height: 60px !important;
-        width: 60px !important;
-        border-radius: 30px;
-        background-color: #2c8cff;
-    }
-    .stSlider label {
-        font-size: 20px;
-    }
-    </style>
-""", unsafe_allow_html=True)
+# --- Pilihan Bank ---
+col1, col2 = st.columns(2)
+with col1:
+    bank1 = st.selectbox("Choose First Bank", sorted(df["Bank"].unique()), key="bank1")
+with col2:
+    bank2 = st.selectbox("Choose Second Bank", sorted(df["Bank"].unique()), key="bank2")
 
-# --- Pilih Bank ---
-selected_bank = st.selectbox("Choose Your Bank", sorted(df["Bank"].unique()))
-filtered_df = df[df["Bank"] == selected_bank]
+# --- Input Nominal ---
+deposit = st.number_input("Input your deposit amount (Rp):", min_value=8_000_000, step=1_000_000, format="%i")
+st.caption(f"Formatted: Rp {deposit:,.0f}")
 
-# --- Input Penempatan Dana ---
-st.markdown("### How Much Money Do You Want to Deposit?")
-deposit = st.number_input(
-    "Input Here!:", min_value=8_000_000, step=1_000_000
-)
-st.caption(f"Format: Rp {deposit:,.0f}")
+# --- Input Tenor (intersecting options) ---
+common_tenors = sorted(set(df[df["Bank"] == bank1]["Tenor"]).intersection(df[df["Bank"] == bank2]["Tenor"]))
+tenor = st.select_slider("Tenor (Month)", options=common_tenors, value=common_tenors[0])
 
-# --- Tenor Slider (otomatis dari bank terpilih) ---
-st.markdown("### Tenor (Month)")
-available_tenors = sorted(filtered_df["Tenor"].unique())
-tenor = st.select_slider("Tenor", options=available_tenors, value=available_tenors[0])
+# --- Ambil Suku Bunga dari Kedua Bank ---
+rate1 = df[(df["Bank"] == bank1) & (df["Tenor"] == tenor)]["Interest"].values[0]
+rate2 = df[(df["Bank"] == bank2) & (df["Tenor"] == tenor)]["Interest"].values[0]
 
-# --- Ambil Suku Bunga ---
-rate_row = filtered_df[filtered_df["Tenor"] == tenor]
-interest_rate = rate_row["Interest"].values[0] if not rate_row.empty else 0.0
-st.markdown(f"### Interest\n{interest_rate:.2f} %")
-
-# # --- Fungsi Simulasi Perhitungan Bunga ---
-# def calculate_return(nominal, rate, tenor_months):
-#     interest = nominal * (rate / 100) * (tenor_months * 30 / 365)
-#     net_interest = interest * 0.8  # dikurangi pajak 20%
-#     return nominal + net_interest, net_interest
+# --- Fungsi Perhitungan Bunga ---
 def calculate_return(nominal, rate, tenor_months):
-    if tenor_months == 12:
-        days = 365
-    else:
-        # Fleksibel: anggap 1 bulan = 30 hari
-        days = tenor_months * 30
-
-    # Hitung bunga kotor
-    interest = nominal * (rate / 100) * (days / 365)
-
-    # Potong pajak 20%
-    net_interest = interest * 0.8
+    days = 365 if tenor_months == 12 else tenor_months * 30
+    gross_interest = nominal * (rate / 100) * (days / 365)
+    net_interest = gross_interest * 0.8
     total = nominal + net_interest
-
     return total, net_interest
 
-# --- Tombol Hitung ---
-# if st.button("Calculate"):
-#     total, net_earning = calculate_return(deposit, interest_rate, tenor)
-#     st.markdown("### Result")
-#     st.write(f"**Interest After Tax (20%)**: Rp {net_earning:,.0f}")
-#     st.write(f"**Total Earning**: Rp {total:,.0f}")
-if st.button("Calculate"):
-    total, net_earning = calculate_return(deposit, interest_rate, tenor)
+# --- Hitung dan Tampilkan ---
+if st.button("Compare"):
+    total1, net1 = calculate_return(deposit, rate1, tenor)
+    total2, net2 = calculate_return(deposit, rate2, tenor)
 
-    # Buat DataFrame hasil
-    result_df = pd.DataFrame({
-        "Keterangan": ["Nominal Awal", "Bunga Setelah Pajak (20%)", "Total Diterima"],
-        "Jumlah (Rp)": [deposit, net_earning, total]
+    result = pd.DataFrame({
+        "Description": ["Initial Deposit", "Net Interest (after 20% tax)", "Total Received"],
+        bank1: [deposit, net1, total1],
+        bank2: [deposit, net2, total2],
+        "Difference": ["-", f"Rp {net2 - net1:,.0f}", f"Rp {total2 - total1:,.0f}"]
     })
 
-    st.markdown("### Hasil Simulasi")
-    st.table(result_df.style.format({"Jumlah (Rp)": "Rp {:,.0f}"}))
+    st.markdown("### Comparison Result")
+    st.table(result.style.format({bank1: "Rp {:,.0f}", bank2: "Rp {:,.0f}"}))
+
+    st.warning("""
+💡 **Note**: Make sure you're comparing banks that you already use. 
+- Transferring funds to unfamiliar or digital-only banks may incur fees.
+- Higher interest rates (e.g., >4.25%) may reflect higher risk or limited LPS protection.
+""")
 
 # --- Footer ---
 st.markdown("---")
-st.caption("Catatan: Perhitungan ini hanya sebagai alat bantu simulasi dan tidak dimaksudkan untuk menyediakan rekomendasi apa pun.")
-st.caption("Asumsi: 1 bulan = 30 hari, dan 1 tahun = 365 hari.")
+st.caption("Simulation only. Assumes 1 month = 30 days and 1 year = 365 days.")
